@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 17:14:01 by mkim3             #+#    #+#             */
-/*   Updated: 2022/07/30 19:11:09 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/07/30 22:03:10 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 typedef struct s_thread {
 	pthread_t		thread_id;
@@ -36,19 +39,19 @@ typedef struct s_input {
 	pthread_t thread_id;
 } t_input;
 
-typedef struct s_timeval 
+typedef struct s_chopstick 
+{	
+	long 	id;
+	int 	is_used;
+} t_chopstick;
+
+typedef struct s_philosopher
 {
-	long	tv_sec;
-	long	tv_usec;	
-}
-typedef struct s_philosopher {
-	struct t_chopstick *left;
-	struct t_chopstick *right;
+	t_chopstick *left;
+	t_chopstick *right;
 } t_philosopher;
 
-typedef struct t_chopstick {
-	int	id;
-} t_chopstick;
+
 void 		io_exception();
 void 		memory_exception();
 int			thread_exception();
