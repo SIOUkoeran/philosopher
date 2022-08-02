@@ -3,27 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mkim3 <mkim3@student.42.fr>                +#+  +:+       +#+         #
+#    By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/30 16:33:50 by mkim3             #+#    #+#              #
-#    Updated: 2022/07/30 18:50:52 by mkim3            ###   ########.fr        #
+#    Updated: 2022/08/02 19:18:04 by mkim3            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 GCC=gcc
 FLAGS=-Werror -Wall -Wextra
 SRCS=./exception.c ./linked_list_init.c ./main.c \
-./parsing_input.c ./ft_create_philosopher.c ./philosopher.c
+./parsing_input.c ./ft_create_philosopher.c ./philosopher.c \
+./ft_time_util.c
 OBJS=$(SRCS:.c=.o)
 INCLUDES=./philosophers.c
 NAME=philo
 all : $(NAME)
 
 .c.o:
-	$(GCC) $(FLAGS) -I $(INCLUDES) -c $< -o $@
+	$(GCC)  -I $(INCLUDES) -c $< -o $@
 
 $(NAME) : $(OBJS)
-	$(GCC) $(FLAGS) -I $(INCLUDES) $^ -o $@
+	$(GCC)  -I $(INCLUDES) $^ -o $@
 clean :  
 	rm -rf $(OBJS)
 fclean : clean

@@ -3,18 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkim3 <mkim3@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 17:14:01 by mkim3             #+#    #+#             */
-/*   Updated: 2022/07/30 22:03:10 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/02 20:54:47 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define TIMESTAMP "timestamp_in_ms"
-#define FORK "has taken a fork"
-#define SLEEP "is sleeping"
-#define THINK "is thinking"
-#define died "died"
+#ifndef PHILOSOPHER_H
+# define PHILOSOPHER_H
+
+# define TIMESTAMP "timestamp_in_ms"
+# define FORK "has taken a fork"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define died "died"
+# define EAT "is eating"
 
 #include <pthread.h>
 #include <stdlib.h>
@@ -26,7 +30,6 @@
 
 typedef struct s_thread {
 	pthread_t		thread_id;
-	int				thread_num;
 	char			*string;
 } t_thread;
 
@@ -36,19 +39,26 @@ typedef struct s_input {
 	int	time_to_die;
 	int	time_to_sleep;
 	int	numbers_of_time_eat;
-	pthread_t thread_id;
+	int	number_of_times_each_philosopher_must_eat;
+	int	is_optional;
+	struct timeval	start_time;
 } t_input;
 
-typedef struct s_chopstick 
+typedef struct f_fork 
 {	
-	long 	id;
-	int 	is_used;
-} t_chopstick;
+	long 			id;
+	int 			is_used;
+	pthread_mutex_t	mutex;
+} t_fork;
 
 typedef struct s_philosopher
 {
-	t_chopstick *left;
-	t_chopstick *right;
+	int				num;
+	t_fork 			*left;
+	t_fork 			*right;
+	t_thread		thread;
+	t_input			info;
+	int				limit;
 } t_philosopher;
 
 
@@ -60,3 +70,9 @@ t_thread	*linked_list_init(int n);
 int			ft_atoi(const char *s);
 int 		ft_create_philosopher(t_thread *thread_array, t_input info);
 void		start_philosopher(void *arg);
+int			join_thread_exception();
+int			mutex_exception();
+int			ft_get_time(struct timeval time);
+int			thread_in_fork_exception();
+int 		parsing_input_when_6(char **argv, t_input *info);
+#endif

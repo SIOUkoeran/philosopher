@@ -3,16 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkim3 <mkim3@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:33:30 by mkim3             #+#    #+#             */
-/*   Updated: 2022/07/30 22:06:29 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/02 20:53:49 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+static void ft_printf_thinking_philosopher(t_philosopher *philosopher)
+{
+	printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, THINK);
+}
+
+static int ft_printf_sleep_philosopher(t_philosopher *philosopher)
+{
+	struct timeval time;
+
+	gettimeofday(&time, NULL);
+	printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, SLEEP);
+	while (ft_get_time(time) < philosopher->info.numbers_of_time_eat)
+				usleep(200);
+	return (1);
+}
+
+static int ft_printf_eat_philosopher(t_philosopher *philosopher)
+{
+	struct timeval time;
+	
+	int	left_result = 1;
+	int	right_result = 1;
+	left_result = pthread_mutex_lock(&(philosopher->left->mutex));
+	if (left_result == 0){
+		printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, FORK);
+		right_result = pthread_mutex_lock(&(philosopher->right->mutex));
+		if (right_result == 0){
+			philosopher->limit = 0;
+			printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, EAT);
+			gettimeofday(&time, NULL);
+			while (ft_get_time(time) < philosopher->info.numbers_of_time_eat)
+				usleep(200);
+			pthread_mutex_unlock(&(philosopher->right->mutex));
+			pthread_mutex_unlock(&(philosopher->left->mutex));
+		}
+	}
+	return (left_result == 0 && right_result == 0);
+}
+
 void start_philosopher(void *arg)
 {
-	(void) *arg;
+	t_philosopher *philosopher;
+
+	philosopher = (t_philosopher *) arg;
+	philosopher->limit = 0;
+	while (1)
+	{
+		if (ft_printf_eat_philosopher(philosopher))
+			ft_printf_sleep_philosopher(philosopher);
+		ft_printf_thinking_philosopher(philosopher);
+	}
 }
