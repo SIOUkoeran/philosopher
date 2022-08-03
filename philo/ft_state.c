@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 20:38:07 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/03 18:28:08 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 22:49:16 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void ft_thread_state(void* arg)
 
 		while (++idx < philosopher->info.philosophers)
 		{
-			pthread_mutex_lock(&philosopher[idx].limit_mutex);
-			if (ft_get_time(philosopher[idx].limit) > philosopher->info.time_to_die + 8)
+			pthread_mutex_lock(&philosopher[idx].limit_mutex); 
+			if (ft_get_time(philosopher[idx].limit) >= philosopher->info.time_to_die)
 			{
 				ft_printf_died_philosopher(&philosopher[idx]);
 				flag = 1;
@@ -53,11 +53,7 @@ void ft_thread_state(void* arg)
 					pthread_mutex_unlock(&philosopher[idx].eat_mutex);
 				}
 				if (eat_cnt == philosopher->info.philosophers)
-				{
 					flag = 1;
-					printf("\n done \n");
-				}
-					
 				eat_cnt = 0;
 			}
 		}

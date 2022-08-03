@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:33:30 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/03 18:07:14 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 22:49:28 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void ft_printf_thinking_philosopher(t_philosopher *philosopher)
 {
 	printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, THINK);
+	usleep(200);
 }
 
 static int ft_printf_sleep_philosopher(t_philosopher *philosopher)
@@ -39,7 +40,10 @@ static int ft_printf_eat_philosopher(t_philosopher *philosopher)
 		printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, FORK);
 		right_result = pthread_mutex_lock(&(philosopher->right->mutex));
 		if (right_result == 0){
+			pthread_mutex_lock(&(philosopher->limit_mutex));
 			gettimeofday(&(philosopher->limit), NULL);
+			pthread_mutex_unlock(&(philosopher->limit_mutex));
+			printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, FORK);
 			printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, EAT);
 			pthread_mutex_lock(&(philosopher->eat_mutex));
 			philosopher->eat_cnt = philosopher->eat_cnt + 1;
@@ -65,7 +69,7 @@ void start_philosopher(void *arg)
 		if (ft_printf_eat_philosopher(philosopher))
 			ft_printf_sleep_philosopher(philosopher);
 		ft_printf_thinking_philosopher(philosopher);
-		if (ft_get_time(philosopher->limit) > philosopher->info.time_to_die + 8)
+		if (ft_get_time(philosopher->limit) >= philosopher->info.time_to_die)
 		{
 			while (1)
 			{

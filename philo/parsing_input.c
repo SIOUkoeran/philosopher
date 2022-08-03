@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 16:29:06 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/03 18:46:31 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 22:48:40 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int	parsing_input(char **argv, t_input *info)
 	info->philosophers = atoi(*argv++);
 	info->forks = info->philosophers;
 	info->time_to_die = atoi(*argv++);
-	info->time_to_sleep = atoi(*argv++);
 	info->numbers_of_time_eat = atoi(*argv);
+	info->time_to_sleep = atoi(*argv++);
 	info->is_optional = 0;
 	if (!info->philosophers || !info->time_to_die)
 		return (1);
