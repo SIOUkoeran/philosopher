@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 17:14:01 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/02 20:54:47 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 18:16:24 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ typedef struct s_philosopher
 	t_fork 			*right;
 	t_thread		thread;
 	t_input			info;
-	int				limit;
+	struct timeval	limit;
+	int				eat_cnt;
+	pthread_mutex_t	eat_mutex;
+	pthread_mutex_t	limit_mutex;
 } t_philosopher;
-
 
 void 		io_exception();
 void 		memory_exception();
@@ -75,4 +77,5 @@ int			mutex_exception();
 int			ft_get_time(struct timeval time);
 int			thread_in_fork_exception();
 int 		parsing_input_when_6(char **argv, t_input *info);
+void		ft_thread_state(void *arg);
 #endif

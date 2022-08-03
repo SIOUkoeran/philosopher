@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:33:30 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/02 20:53:49 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 18:07:14 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@ static int ft_printf_eat_philosopher(t_philosopher *philosopher)
 		printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, FORK);
 		right_result = pthread_mutex_lock(&(philosopher->right->mutex));
 		if (right_result == 0){
-			philosopher->limit = 0;
+			gettimeofday(&(philosopher->limit), NULL);
 			printf("%dms %d %s\n", ft_get_time(philosopher->info.start_time), philosopher->num, EAT);
+			pthread_mutex_lock(&(philosopher->eat_mutex));
+			philosopher->eat_cnt = philosopher->eat_cnt + 1;
+			pthread_mutex_unlock(&(philosopher->eat_mutex));
 			gettimeofday(&time, NULL);
 			while (ft_get_time(time) < philosopher->info.numbers_of_time_eat)
 				usleep(200);
@@ -56,11 +59,18 @@ void start_philosopher(void *arg)
 	t_philosopher *philosopher;
 
 	philosopher = (t_philosopher *) arg;
-	philosopher->limit = 0;
+	gettimeofday(&(philosopher->limit), NULL);
 	while (1)
 	{
 		if (ft_printf_eat_philosopher(philosopher))
 			ft_printf_sleep_philosopher(philosopher);
 		ft_printf_thinking_philosopher(philosopher);
+		if (ft_get_time(philosopher->limit) > philosopher->info.time_to_die + 8)
+		{
+			while (1)
+			{
+			}
+		}
+			
 	}
 }

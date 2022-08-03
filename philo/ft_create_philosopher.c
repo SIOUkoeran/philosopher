@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 18:30:18 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/02 20:22:20 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 18:18:15 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ static void ft_init_philo(t_thread *thread_array, t_philosopher *philosophers, t
 	{
 		philosophers->thread = thread_array[idx];
 		philosophers->num = idx + 1;
-		philosophers->limit = info.time_to_die;
 		philosophers->info = info;
+		philosophers->eat_cnt = 0;
+		pthread_mutex_init(&(philosophers->limit_mutex), NULL);
+		pthread_mutex_init(&(philosophers->eat_mutex), NULL);
 		philosophers++;
 	}
 }
@@ -100,5 +102,6 @@ int ft_create_philosopher(t_thread *thread_array, t_input info)
 	while (++idx < info.philosophers)
 	  if (pthread_create(&thread_array[idx].thread_id, NULL, (void *)&start_philosopher, &philosophers[idx]) == 1)
 	  	return (1);
+	pthread_create(&thread_array[info.forks].thread_id, NULL, (void *)&ft_thread_state, philosophers);
 	return (0);
-}
+}	

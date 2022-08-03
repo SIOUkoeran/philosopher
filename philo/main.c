@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/29 17:20:59 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/02 20:52:58 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 18:14:45 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	ft_input_parsing(int argc, char **argv, t_input *info)
 	{
 		if (parsing_input_when_6(argv, info) == 1)
 		{
+			printf("here");
 			memory_exception();
 			return (1);
 		}
@@ -63,7 +64,7 @@ int main(int argc, char **argv)
 		return (0);
 	if (ft_create_philosopher(thread_array, info) == 1)
 		return thread_exception();
-	if (ft_join_thread(thread_array) == -1)
-		return (-1);
+	if (pthread_join(thread_array[info.forks].thread_id, NULL) == 0)
+		return (0);
 	return (0);
 }

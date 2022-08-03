@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 16:29:06 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/02 20:55:00 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 17:39:25 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	parsing_input(char **argv, t_input *info)
 {
+	(void)*argv++;
 	info->philosophers = atoi(*argv++);
 	info->forks = info->philosophers;
 	info->time_to_die = atoi(*argv++);
@@ -29,6 +30,7 @@ int	parsing_input(char **argv, t_input *info)
 
 int parsing_input_when_6(char **argv, t_input *info)
 {
+	(void) *argv++;
 	info->philosophers = atoi(*argv++);
 	info->forks = info->philosophers;
 	info->time_to_die = atoi(*argv++);
