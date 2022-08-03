@@ -6,7 +6,7 @@
 /*   By: mkim3 <mkim3@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 20:38:07 by mkim3             #+#    #+#             */
-/*   Updated: 2022/08/03 18:17:43 by mkim3            ###   ########.fr       */
+/*   Updated: 2022/08/03 18:28:08 by mkim3            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ void ft_thread_state(void* arg)
 					pthread_mutex_unlock(&philosopher[idx].eat_mutex);
 				}
 				if (eat_cnt == philosopher->info.philosophers)
+				{
 					flag = 1;
+					printf("\n done \n");
+				}
+					
 				eat_cnt = 0;
 			}
 		}
